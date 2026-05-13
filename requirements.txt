@@ -1,3 +1,4 @@
 veryfi
 python-dotenv
 python-dateutil
+pytest

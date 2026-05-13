@@ -6,7 +6,7 @@ from typing import Optional
 from .utils import non_empty_lines, normalize_date, normalize_text
 
 
-AMOUNT_PATTERN = r"-?\$?\d[\d,]*(?:\.\d{2})"
+AMOUNT_PATTERN = r"-?\$?\d[\d,]*(?:\.\d+)?"
 
 
 def parse_amount(value: str | None) -> Optional[float]:
@@ -25,6 +25,183 @@ def parse_amount(value: str | None) -> Optional[float]:
 
     number = float(cleaned)
     return -number if is_negative else number
+
+
+def is_footer_line(line: str) -> bool:
+    lower = line.lower()
+
+    footer_markers = [
+        "total usd",
+        "please update your system",
+        "please contact accounts",
+        "please make payments",
+        "wire/ach payment",
+        "ach routing",
+        "wire routing",
+        "swift",
+        "for questions",
+        "phone no",
+        "fax no",
+        "e-mail",
+        "web site",
+        "accountsreceivable@switch.com",
+        "www.switch.com",
+    ]
+
+    return any(marker in lower for marker in footer_markers)
+
+
+def remove_footer_text(text: str) -> str:
+    patterns = [
+        r"\bTotal\s+USD\b.*$",
+        r"\bPlease update your system\b.*$",
+        r"\bPlease contact accounts\b.*$",
+        r"\bPlease make payments\b.*$",
+        r"\bWire/ACH Payment\b.*$",
+        r"\bACH Routing\b.*$",
+        r"\bWire Routing\b.*$",
+        r"\bSWIFT\b.*$",
+        r"\bFor questions\b.*$",
+        r"\bPhone No\.\b.*$",
+        r"\bFax No\.\b.*$",
+        r"\bE-Mail\b.*$",
+        r"\bWeb Site\b.*$",
+        r"\bwww\.switch\.com\b.*$",
+    ]
+
+    cleaned = text
+
+    for pattern in patterns:
+        cleaned = re.sub(pattern, "", cleaned, flags=re.IGNORECASE).strip()
+
+    return cleaned
+
+
+def is_page_header_or_metadata_line(line: str) -> bool:
+    """
+    Detect repeated page headers and invoice metadata.
+    """
+    lower = line.lower().strip()
+
+    # Exact standalone header words only.
+    exact_metadata_lines = {
+        "switch",
+        "invoice",
+        "page",
+        "invoice date due date invoice no.",
+        "invoice date due date invoice no",
+        "account no. p.o. number services for month of",
+        "account no. p.o. number services for month",
+        "description quantity rate amount",
+    }
+
+    if lower in exact_metadata_lines:
+        return True
+
+    # Combined OCR page-header lines.
+    if lower.startswith("invoice switch"):
+        return True
+
+    if (
+        "invoice date" in lower
+        and "due date" in lower
+        and "invoice no" in lower
+    ):
+        return True
+
+    if (
+        "account no" in lower
+        and "p.o. number" in lower
+    ):
+        return True
+
+    if (
+        "description" in lower
+        and "quantity" in lower
+        and "rate" in lower
+        and "amount" in lower
+    ):
+        return True
+
+    # Header address lines.
+    if re.fullmatch(r"p\.?\s*o\.?\s*box\s+\d+", lower):
+        return True
+
+    if re.fullmatch(r"dallas,\s*tx\s*\d{5}(?:-\d{4})?", lower):
+        return True
+
+    # Page indicators.
+    if re.fullmatch(r"\d+\s+of\s+\d+", lower):
+        return True
+
+    if re.fullmatch(r"page\s+\d+\s+of\s+\d+", lower):
+        return True
+
+    # Invoice metadata values.
+    if re.fullmatch(r"\d{5,}", line.strip()):
+        return True
+
+    if re.fullmatch(r"PO-[A-Za-z0-9-]+", line.strip(), flags=re.IGNORECASE):
+        return True
+
+    if re.fullmatch(r"[A-Z]-\d+", line.strip()):
+        return True
+
+    if re.fullmatch(
+        r"\d{1,2}/\d{1,2}/\d{2,4}\s+\d{1,2}/\d{1,2}/\d{2,4}",
+        line.strip(),
+    ):
+        return True
+
+    # Month-only service period.
+    if lower in {
+        "january", "february", "march", "april", "may", "june",
+        "july", "august", "september", "october", "november", "december",
+    }:
+        return True
+
+    # Customer address lines in repeated page header.
+    if re.fullmatch(r"\d+ .+", line.strip()) and not re.search(r"\d+\.\d{2}", line):
+        return True
+
+    return False
+
+
+def is_description_continuation(
+    line: str,
+    previous_description: str | None = None,
+) -> bool:
+    """
+    Detect lines that continue a previous line-item description.
+    """
+    lower = line.lower().strip()
+
+    if lower.startswith(("to ", "and ")):
+        return True
+
+    if re.match(r"^[A-Za-z]+,\s*[A-Z]{2}\s*\d{5}", line.strip()):
+        return True
+
+    if previous_description:
+        previous = previous_description.lower().strip()
+        if previous.endswith(" and"):
+            return True
+
+    return False
+
+
+def starts_new_item_description(line: str) -> bool:
+    lower = line.lower().strip()
+
+    return lower.startswith(
+        (
+            "transport |",
+            "carrier taxes",
+            "special partnership discount",
+            "item discount",
+            "installation of cross connect",
+        )
+    )
 
 
 class SwitchInvoiceParser:
@@ -57,38 +234,29 @@ class SwitchInvoiceParser:
 
     def extract_vendor_address(self) -> Optional[str]:
         """
-        Extract vendor address from the top-left invoice header.
-
-        Expected visual format:
-        PO Box 674592
-        Dallas, TX 75267-4592
+        Extract vendor address from the invoice header.
         """
-        header_text = " ".join(self.lines[:15])
+        header_text = " ".join(self.lines[:30])
 
-        match = re.search(
-            r"(PO\s+Box\s+\d+)\s+(Dallas,\s*TX\s*\d{5}(?:-\d{4})?)",
+        po_box_match = re.search(
+            r"P\.?\s*O\.?\s*Box\s+\d+",
             header_text,
             flags=re.IGNORECASE,
         )
 
-        if match:
-            return f"{match.group(1)}, {match.group(2)}"
+        city_match = re.search(
+            r"Dall[ao]s,\s*TX\s*\d{5}(?:-\d{4})?",
+            header_text,
+            flags=re.IGNORECASE,
+        )
 
-        for i, line in enumerate(self.lines):
-            if "po box" in line.lower():
-                po_box = line.strip()
+        if po_box_match and city_match:
+            po_box = po_box_match.group(0)
+            city = city_match.group(0).replace("Dalias", "Dallas")
+            return f"{po_box}, {city}"
 
-                nearby_text = " ".join(self.lines[i:i + 4])
-                city_match = re.search(
-                    r"Dallas,\s*TX\s*\d{5}(?:-\d{4})?",
-                    nearby_text,
-                    flags=re.IGNORECASE,
-                )
-
-                if city_match:
-                    return f"{po_box}, {city_match.group(0)}"
-
-                return po_box
+        if po_box_match:
+            return po_box_match.group(0)
 
         return None
 
@@ -102,10 +270,7 @@ class SwitchInvoiceParser:
 
     def _extract_invoice_metadata(self) -> dict:
         """
-        Extract values from the area:
-
-        Invoice Date | Due Date | Invoice No.
-        09/22/23       08/27/24   1556267
+        Extract values from the area
         """
         metadata = {
             "invoice_date": None,
@@ -136,10 +301,6 @@ class SwitchInvoiceParser:
         return metadata
 
     def extract_bill_to_name(self) -> Optional[str]:
-        """
-        The Switch invoice does not show a clear 'Bill To:' label in the screenshot.
-        The customer block appears between the invoice metadata and Account No. table.
-        """
         account_idx = None
 
         for i, line in enumerate(self.lines):
@@ -185,49 +346,111 @@ class SwitchInvoiceParser:
 
         return candidate_lines[-3] if len(candidate_lines) >= 3 else candidate_lines[0]
 
+
     def extract_line_items(self) -> list[dict]:
         section = self._extract_line_item_section()
         items = []
 
-        pending_prefix_lines = []
+        pending_description_lines = []
 
-        line_pattern = re.compile(
+        full_item_pattern = re.compile(
             rf"^(?P<description>.+?)\s+"
             rf"(?P<quantity>{AMOUNT_PATTERN})\s+"
             rf"(?P<rate>{AMOUNT_PATTERN})\s+"
             rf"(?P<amount>{AMOUNT_PATTERN})$"
         )
 
-        for line in section:
-            line = line.strip()
+        numeric_only_pattern = re.compile(
+            rf"^(?P<quantity>{AMOUNT_PATTERN})\s+"
+            rf"(?P<rate>{AMOUNT_PATTERN})\s+"
+            rf"(?P<amount>{AMOUNT_PATTERN})$"
+        )
+
+        for raw_line in section:
+            line = raw_line.strip()
+
             if not line:
                 continue
 
-            candidate = " ".join(pending_prefix_lines + [line]).strip()
-            match = line_pattern.match(candidate)
-
-            if match:
-                item = {
-                    "sku": None,
-                    "description": match.group("description").strip(),
-                    "quantity": parse_amount(match.group("quantity")),
-                    "tax_rate": None,
-                    "price": parse_amount(match.group("rate")),
-                    "total": parse_amount(match.group("amount")),
-                }
-                items.append(item)
-                pending_prefix_lines = []
+            if is_footer_line(line):
+                # if items or pending_description_lines:
+                #     break
                 continue
 
-            # If we already have an item and the current line does not contain
-            # numeric columns, it is most likely a continuation of the previous
-            # description, not the beginning of the next item.
-            if items:
+            line = remove_footer_text(line)
+
+            if not line:
+                continue
+
+            # Skip repeated page headers and invoice metadata.
+            if is_page_header_or_metadata_line(line):
+                continue
+
+            candidate = " ".join(pending_description_lines + [line]).strip()
+            candidate = remove_footer_text(candidate)
+
+            # Case 1: description + quantity + rate + amount on one line.
+            full_match = full_item_pattern.match(candidate)
+
+            if full_match:
+                item = {
+                    "sku": None,
+                    "description": remove_footer_text(
+                        full_match.group("description").strip()
+                    ),
+                    "quantity": parse_amount(full_match.group("quantity")),
+                    "tax_rate": None,
+                    "price": parse_amount(full_match.group("rate")),
+                    "total": parse_amount(full_match.group("amount")),
+                }
+
+                items.append(item)
+                pending_description_lines = []
+                continue
+
+            # Case 2: description lines followed by numeric-only row.
+            numeric_match = numeric_only_pattern.match(line)
+
+            if numeric_match and pending_description_lines:
+                description = " ".join(pending_description_lines).strip()
+
+                item = {
+                    "sku": None,
+                    "description": remove_footer_text(description),
+                    "quantity": parse_amount(numeric_match.group("quantity")),
+                    "tax_rate": None,
+                    "price": parse_amount(numeric_match.group("rate")),
+                    "total": parse_amount(numeric_match.group("amount")),
+                }
+
+                items.append(item)
+                pending_description_lines = []
+                continue
+
+            # Case 3: continuation of the previous item.
+            # Only append clear continuation lines, not arbitrary metadata.
+            if (
+                items
+                and not pending_description_lines
+                and is_description_continuation(line, items[-1]["description"])
+            ):
                 items[-1]["description"] = (
                     items[-1]["description"] + " " + line
                 ).strip()
-            else:
-                pending_prefix_lines.append(line)
+                continue
+
+            # Case 4: start of a new item description.
+            if starts_new_item_description(line):
+                pending_description_lines = [line]
+                continue
+
+            # Case 5: continuation of a pending item description.
+            if pending_description_lines:
+                pending_description_lines.append(line)
+                continue
+
+            # Ignore unrelated OCR noise.
+            continue
 
         return items
 
@@ -249,29 +472,11 @@ class SwitchInvoiceParser:
         if start_idx is None:
             return []
 
-        stop_markers = [
-            "subtotal",
-            "sub total",
-            "total due",
-            "amount due",
-            "balance due",
-            "invoice total",
-            "terms",
-            "thank you",
+        return [
+            line.strip()
+            for line in self.lines[start_idx:]
+            if line.strip()
         ]
-
-        section = []
-
-        for line in self.lines[start_idx:]:
-            lower = line.lower()
-
-            if any(marker in lower for marker in stop_markers):
-                break
-
-            if line.strip():
-                section.append(line.strip())
-
-        return section
 
     @staticmethod
     def add_warnings(result: dict) -> None:
