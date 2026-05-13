@@ -27,27 +27,6 @@ def parse_amount(value: str | None) -> Optional[float]:
     return -number if is_negative else number
 
 
-def is_switch_invoice_format(ocr_text: str) -> bool:
-    text = normalize_text(ocr_text).lower()
-
-    required_markers = [
-        "switch",
-        "invoice date",
-        "due date",
-        "invoice no",
-        "account no",
-        "p.o. number",
-        "description",
-        "quantity",
-        "rate",
-        "amount",
-    ]
-
-    score = sum(1 for marker in required_markers if marker in text)
-
-    return score >= 7
-
-
 class SwitchInvoiceParser:
     def __init__(self, ocr_text: str):
         self.text = normalize_text(ocr_text)

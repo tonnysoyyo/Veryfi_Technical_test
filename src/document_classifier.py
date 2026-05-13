@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import re
 from dataclasses import dataclass
 
 from .utils import normalize_text
@@ -9,45 +8,74 @@ from .utils import normalize_text
 @dataclass(frozen=True)
 class ClassificationResult:
     is_supported: bool
+    document_type: str | None
     score: int
-    reasons: list[str]
+    matched_markers: list[str]
+    missing_markers: list[str]
+    reason: str
+
+
+SWITCH_REQUIRED_MARKERS = [
+    "switch",
+    "invoice date",
+    "due date",
+    "invoice no",
+    "account no",
+    "p.o. number",
+    "description",
+    "quantity",
+    "rate",
+    "amount",
+]
 
 
 def classify_document(ocr_text: str) -> ClassificationResult:
     """
-    Determine whether the OCR text looks like the expected invoice format.
+    Classify whether a document belongs to the expected Switch invoice format.
 
-    This is intentionally conservative. We want to reject unrelated documents,
-    but still allow OCR noise in supported invoices.
+    Since the provided PDFs follow the Switch invoice template, this classifier 
+    is intentionally template-specific.
     """
-    text = normalize_text(ocr_text)
-    lower = text.lower()
+    text = normalize_text(ocr_text).lower()
 
-    checks = {
-        "invoice_marker": bool(re.search(r"\binvoice\b|\binv(?:oice)?\.?\s*(?:no|#|number)", lower)),
-        "invoice_number": bool(re.search(r"invoice\s*(?:number|no\.?|#)|inv\s*(?:number|no\.?|#)", lower)),
-        "bill_to": bool(re.search(r"bill\s*to|billed\s*to|customer|client", lower)),
-        "date": bool(re.search(r"\bdate\b|invoice\s*date", lower)),
-        "line_header_sku": bool(re.search(r"\bsku\b|\bitem\b|\bproduct\b|\bcode\b", lower)),
-        "line_header_description": bool(re.search(r"\bdescription\b|\bitem description\b", lower)),
-        "line_header_quantity": bool(re.search(r"\bqty\b|\bquantity\b", lower)),
-        "line_header_price_total": bool(re.search(r"\bprice\b|\bunit price\b|\brate\b", lower))
-        and bool(re.search(r"\btotal\b|\bamount\b", lower)),
-    }
+    matched_markers = [
+        marker for marker in SWITCH_REQUIRED_MARKERS
+        if marker in text
+    ]
 
-    reasons = [name for name, passed in checks.items() if passed]
-    score = len(reasons)
+    missing_markers = [
+        marker for marker in SWITCH_REQUIRED_MARKERS
+        if marker not in text
+    ]
 
-    # Require a strong invoice signal and enough table/header structure.
+    score = len(matched_markers)
+
+    # All markers are not requiredbecause OCR can introduce small errors.
+    # However, the document must have a strong Switch invoice signature.
     is_supported = (
-        checks["invoice_marker"]
-        and checks["bill_to"]
-        and checks["line_header_price_total"]
-        and score >= 5
+        "switch" in matched_markers
+        and "description" in matched_markers
+        and "quantity" in matched_markers
+        and "rate" in matched_markers
+        and "amount" in matched_markers
+        and score >= 7
     )
 
+    if is_supported:
+        return ClassificationResult(
+            is_supported=True,
+            document_type="switch_invoice",
+            score=score,
+            matched_markers=matched_markers,
+            missing_markers=missing_markers,
+            reason="Document matches the expected Switch invoice format.",
+        )
+
     return ClassificationResult(
-        is_supported=is_supported,
+        is_supported=False,
+        document_type=None,
         score=score,
-        reasons=reasons,
+        matched_markers=matched_markers,
+        missing_markers=missing_markers,
+        reason="Document does not match the expected Switch invoice format.",
     )

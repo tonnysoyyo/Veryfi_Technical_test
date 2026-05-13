@@ -1,23 +1,25 @@
+from __future__ import annotations
+
+from dataclasses import asdict
+
 from .document_classifier import classify_document
-from .switch_invoice_parser import SwitchInvoiceParser, is_switch_invoice_format
+from .switch_invoice_parser import SwitchInvoiceParser
+from .utils import normalize_text
 
 
 class InvoiceParser:
     def __init__(self, ocr_text: str):
-        self.text = ocr_text
+        self.text = normalize_text(ocr_text)
 
     def parse(self, file_name: str | None = None) -> dict:
-        if is_switch_invoice_format(self.text):
-            return SwitchInvoiceParser(self.text).parse(file_name=file_name)
-
         classification = classify_document(self.text)
+
+        if classification.is_supported and classification.document_type == "switch_invoice":
+            return SwitchInvoiceParser(self.text).parse(file_name=file_name)
 
         return {
             "status": "rejected",
             "file_name": file_name,
-            "reason": "Document does not match the expected Switch invoice format.",
-            "classification": {
-                "score": classification.score,
-                "matched_rules": classification.reasons,
-            },
+            "reason": classification.reason,
+            "classification": asdict(classification),
         }
