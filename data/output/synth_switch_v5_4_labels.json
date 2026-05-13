@@ -1,0 +1,69 @@
+{
+  "status": "accepted",
+  "document_type": "switch_invoice",
+  "file_name": "synth-switch_v5-4.pdf",
+  "vendor_name": "Switch",
+  "vendor_address": "PO Box 674592, Dallas, TX 75267-4592",
+  "bill_to_name": "Toni Hackel",
+  "invoice_number": "1556267",
+  "date": "2023-09-22",
+  "line_items": [
+    {
+      "sku": null,
+      "description": "Transport | Switch Fiber Pair (Intra-campus) | Pairs (4419693704) (04/2023|10 Gbps Fiber to HOEpyb (YSPG4VFH) (04/2023)",
+      "quantity": 2912.98,
+      "tax_rate": null,
+      "price": 934.09,
+      "total": 2720985.49
+    },
+    {
+      "sku": null,
+      "description": "Carrier Taxes for Transport | 230 Gbps Wavelength Diverse between Sparks, OR 56789 and Plano, NV 98765 (SNpTfT) (NJYM5MQP) (07/2023 Taxes) (07/2023)",
+      "quantity": 3500.87,
+      "tax_rate": null,
+      "price": 6229.33,
+      "total": 21808074.52
+    },
+    {
+      "sku": null,
+      "description": "Special Partnership Discount (03/2023)",
+      "quantity": 8.0,
+      "tax_rate": null,
+      "price": -561.0,
+      "total": -4488.0
+    },
+    {
+      "sku": null,
+      "description": "Item Discount: Special Partnership Discount (11/2023)",
+      "quantity": 8.0,
+      "tax_rate": null,
+      "price": -296.0,
+      "total": -2368.0
+    },
+    {
+      "sku": null,
+      "description": "Transport | 82 Gbps Fiber to YDDTJOrnuW (L0KSKNCB) (01/2024)",
+      "quantity": 5607.34,
+      "tax_rate": null,
+      "price": 656.07,
+      "total": 3678807.55
+    },
+    {
+      "sku": null,
+      "description": "Carrier Taxes for Transport | 45 Gbps Wavelength Diverse between Hillsboro, NV 98765 and Portland, TX 56789 (a488ZH) (8D3PKG77) (05/2023 Taxes) (05/2023)",
+      "quantity": 3949.46,
+      "tax_rate": null,
+      "price": 7128.95,
+      "total": 28155502.87
+    },
+    {
+      "sku": null,
+      "description": "Transport | 97 Gbps Fiber to 3XMOyFdB (5EE7PIWY) (02/2024)",
+      "quantity": 942.71,
+      "tax_rate": null,
+      "price": 1918.01,
+      "total": 1808127.21
+    }
+  ],
+  "warnings": []
+}

@@ -373,8 +373,6 @@ class SwitchInvoiceParser:
                 continue
 
             if is_footer_line(line):
-                # if items or pending_description_lines:
-                #     break
                 continue
 
             line = remove_footer_text(line)
@@ -428,7 +426,6 @@ class SwitchInvoiceParser:
                 continue
 
             # Case 3: continuation of the previous item.
-            # Only append clear continuation lines, not arbitrary metadata.
             if (
                 items
                 and not pending_description_lines

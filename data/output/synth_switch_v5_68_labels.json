@@ -1,0 +1,229 @@
+{
+  "status": "accepted",
+  "document_type": "switch_invoice",
+  "file_name": "synth-switch_v5-68.pdf",
+  "vendor_name": "Switch",
+  "vendor_address": "PO Box 674592, Dallas, TX 75267-4592",
+  "bill_to_name": "Dataiku, Inc.",
+  "invoice_number": "699581195",
+  "date": "2023-11-18",
+  "line_items": [
+    {
+      "sku": null,
+      "description": "Transport | Switch Fiber Pair (Intra-campus) | Pairs (5741401765) (09/2023|10 Gbps Fiber to mQX5g4cY (NLOBD16I) (09/2023)",
+      "quantity": 4.7,
+      "tax_rate": null,
+      "price": 4354.28,
+      "total": 20465.12
+    },
+    {
+      "sku": null,
+      "description": "Installation of Cross Connect | 690 Gbps Fiber to zuuBXKLZG",
+      "quantity": 353.21,
+      "tax_rate": null,
+      "price": 1251.12,
+      "total": 441908.1
+    },
+    {
+      "sku": null,
+      "description": "Transport | Switch Fiber Pair (Intra-campus) | Pairs (7530228371) (09/2023|10 Gbps Fiber to EUtkqbSO (MK4CHGGT) (09/2023)",
+      "quantity": 4823.53,
+      "tax_rate": null,
+      "price": -1020.63,
+      "total": -4923039.42
+    },
+    {
+      "sku": null,
+      "description": "Installation of Cross Connect | 907 Gbps Fiber to 5OGdqc",
+      "quantity": 475.5,
+      "tax_rate": null,
+      "price": 4764.54,
+      "total": 2265538.77
+    },
+    {
+      "sku": null,
+      "description": "Transport | Switch Fiber Pair (Intra-campus) | Pairs (2746521855) (12/2023|10 Gbps Fiber to gC4kE3TTV (H5TNRM9U) (12/2023)",
+      "quantity": 347.46,
+      "tax_rate": null,
+      "price": 7885.71,
+      "total": 2739968.8
+    },
+    {
+      "sku": null,
+      "description": "Item Discount: Special Partnership Discount (02/2024)",
+      "quantity": 6.0,
+      "tax_rate": null,
+      "price": -43.0,
+      "total": -258.0
+    },
+    {
+      "sku": null,
+      "description": "Transport | 040 Gbps Fiber to 7nGIFCwq0H (E7JUMXRS) (10/2023)",
+      "quantity": 8278.13,
+      "tax_rate": null,
+      "price": 291.97,
+      "total": 2416965.62
+    },
+    {
+      "sku": null,
+      "description": "Installation of Cross Connect | 75 Gbps Fiber to FmcmB9xEDO",
+      "quantity": 821.17,
+      "tax_rate": null,
+      "price": 2264.96,
+      "total": 1859917.2
+    },
+    {
+      "sku": null,
+      "description": "Carrier Taxes for Transport | 11 Gbps Wavelength Diverse between Sparks, OR 12345 and Las Vegas, TX 98765 (OEM5fbta0) (LENLZRKF) (01/2024 Taxes) (01/2024)",
+      "quantity": 926.45,
+      "tax_rate": null,
+      "price": 3213.97,
+      "total": 2977582.51
+    },
+    {
+      "sku": null,
+      "description": "Transport | 99 Gbps Fiber to Rcc3h (7Y5JG0WH) (05/2023)",
+      "quantity": 1585.94,
+      "tax_rate": null,
+      "price": -6362.73,
+      "total": -10090908.02
+    },
+    {
+      "sku": null,
+      "description": "Item Discount: One-Time Partnership Discount (02/2024)",
+      "quantity": 7.0,
+      "tax_rate": null,
+      "price": -644.0,
+      "total": -4508.0
+    },
+    {
+      "sku": null,
+      "description": "Installation of Cross Connect | 87 Gbps Fiber to z78r91 BUp5",
+      "quantity": 3262.72,
+      "tax_rate": null,
+      "price": 1259.8,
+      "total": 4110374.66
+    },
+    {
+      "sku": null,
+      "description": "Carrier Taxes for Transport | 585 Gbps Wavelength Diverse between Plano, TX 56789 and Portland, NV 98765 (mtWFAbmZzC) (MY1ACCE0) (11/2023 Taxes) (11/2023)",
+      "quantity": 2417.88,
+      "tax_rate": null,
+      "price": -3491.5,
+      "total": -8442028.02
+    },
+    {
+      "sku": null,
+      "description": "Transport | Switch Fiber Pair (Intra-campus) | Pairs (2696286126) (02/2024|10 Gbps Fiber to tG8QL4dQ (23C0Y1DE) (02/2024)",
+      "quantity": 1301.47,
+      "tax_rate": null,
+      "price": 5033.07,
+      "total": 6550389.61
+    },
+    {
+      "sku": null,
+      "description": "Transport | 750 Gbps Fiber to PuXWMv (UFKCJCVC) (09/2023)",
+      "quantity": 336.72,
+      "tax_rate": null,
+      "price": 343.99,
+      "total": 115828.31
+    },
+    {
+      "sku": null,
+      "description": "Carrier Taxes for Transport | 49 Gbps Wavelength Diverse between Hillsboro, OR 56789 and Sparks, NV 98765 (ZgJlvoL) (87BSJFVS) (05/2023 Taxes) (05/2023)",
+      "quantity": 2358.4,
+      "tax_rate": null,
+      "price": 404.21,
+      "total": 953288.86
+    },
+    {
+      "sku": null,
+      "description": "Carrier Taxes for Transport | 84 Gbps Wavelength Diverse between Plano, OR 56789 and Plano, NV 98765 (jz5iOqPFU) (PTDUAIUV) (03/2023 Taxes) (03/2023)",
+      "quantity": 8253.72,
+      "tax_rate": null,
+      "price": 1799.45,
+      "total": 14852156.45
+    },
+    {
+      "sku": null,
+      "description": "Carrier Taxes for Transport | 21 Gbps Wavelength Diverse between LasVegas, OR 12345 and Plano, NV 98765 (Bppcbo9) (WCHCP0RF) (06/2023 Taxes) (06/2023)",
+      "quantity": 3339.71,
+      "tax_rate": null,
+      "price": 663.92,
+      "total": 2217300.26
+    },
+    {
+      "sku": null,
+      "description": "Carrier Taxes for Transport | 31 Gbps Wavelength Diverse between Plano, OR 12345 and Plano, TX 56789 (rMJ08fdV3) (9X6N196Q) (07/2023 Taxes) (07/2023)",
+      "quantity": 3575.35,
+      "tax_rate": null,
+      "price": 4926.7,
+      "total": 17614676.84
+    },
+    {
+      "sku": null,
+      "description": "Carrier Taxes for Transport | 511 Gbps Wavelength Diverse between Portland, OR 12345 and Sparks, NV 12345 (0RTbu) (5MFVE9BL) (03/2023 Taxes) (03/2023)",
+      "quantity": 5759.41,
+      "tax_rate": null,
+      "price": 4204.68,
+      "total": 24216476.04
+    },
+    {
+      "sku": null,
+      "description": "Item Discount: Special Partnership Discount (02/2024)",
+      "quantity": 7.0,
+      "tax_rate": null,
+      "price": -579.0,
+      "total": -4053.0
+    },
+    {
+      "sku": null,
+      "description": "Installation of Cross Connect | 590 Gbps Fiber to 79Q5cvUF",
+      "quantity": 973.17,
+      "tax_rate": null,
+      "price": 5969.51,
+      "total": 5809348.05
+    },
+    {
+      "sku": null,
+      "description": "Installation of Cross Connect | 74 Gbps Fiber to dy0en",
+      "quantity": 1545.03,
+      "tax_rate": null,
+      "price": 2800.07,
+      "total": 4326192.15
+    },
+    {
+      "sku": null,
+      "description": "Transport | 719 Gbps Fiber to 0RxCo6EF3 (X47VYARP) (08/2023)",
+      "quantity": 6874.59,
+      "tax_rate": null,
+      "price": 6356.55,
+      "total": 43698675.06
+    },
+    {
+      "sku": null,
+      "description": "Installation of Cross Connect | 99 Gbps Fiber to jUdIwc",
+      "quantity": 170.75,
+      "tax_rate": null,
+      "price": 6832.01,
+      "total": 1166565.71
+    },
+    {
+      "sku": null,
+      "description": "Transport | 506 Gbps Fiber to 49SxN6 (4MVQGWYE) (09/2023)",
+      "quantity": 2932.72,
+      "tax_rate": null,
+      "price": 8720.18,
+      "total": 25573846.29
+    },
+    {
+      "sku": null,
+      "description": "Transport | Switch Fiber Pair (Intra-campus) | Pairs (4634995248) (09/2023|10 Gbps Fiber to 976sq4 (X17YWJQN) (09/2023)",
+      "quantity": 979.67,
+      "tax_rate": null,
+      "price": 3380.0,
+      "total": 3311284.6
+    }
+  ],
+  "warnings": []
+}

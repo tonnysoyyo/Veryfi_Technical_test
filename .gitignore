@@ -4,6 +4,5 @@ __pycache__/
 .pytest_cache/
 .venv/
 venv/
-data/output/*.json
 data/ocr/*.txt
 data/ocr/*.json

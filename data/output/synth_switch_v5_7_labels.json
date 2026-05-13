@@ -1,0 +1,61 @@
+{
+  "status": "accepted",
+  "document_type": "switch_invoice",
+  "file_name": "synth-switch_v5-7.pdf",
+  "vendor_name": "Switch",
+  "vendor_address": "PO Box 674592, Dallas, TX 75267-4592",
+  "bill_to_name": "Nu Life Health",
+  "invoice_number": "16005913",
+  "date": "2023-09-11",
+  "line_items": [
+    {
+      "sku": null,
+      "description": "Carrier Taxes for Transport | 58 Gbps Wavelength Diverse between Sparks, OR 98765 and LasVegas, OR 56789 (ymEw7J) (U4M7QOSJ) (10/2023 Taxes) (10/2023)",
+      "quantity": 6016.09,
+      "tax_rate": null,
+      "price": -1781.87,
+      "total": -10719890.29
+    },
+    {
+      "sku": null,
+      "description": "Transport | 971 Gbps Fiber to wXv21fam (X6HCHK1C) (10/2023)",
+      "quantity": 3372.59,
+      "tax_rate": null,
+      "price": 3868.31,
+      "total": 13046223.62
+    },
+    {
+      "sku": null,
+      "description": "Carrier Taxes for Transport | 486 Gbps Wavelength Diverse between Hillsboro, NV 56789 and Portland, NV 56789 (5FrLsxw) (JTUKEGVE) (05/2023 Taxes) (05/2023)",
+      "quantity": 3593.22,
+      "tax_rate": null,
+      "price": 4915.32,
+      "total": 17661826.13
+    },
+    {
+      "sku": null,
+      "description": "Transport | Switch Fiber Pair (Intra-campus) | Pairs (8963157731) (01/2024|10 Gbps Fiber to dHrINDY (1OVAXL6A) (01/2024)",
+      "quantity": 1714.46,
+      "tax_rate": null,
+      "price": 1186.61,
+      "total": 2034395.38
+    },
+    {
+      "sku": null,
+      "description": "Transport | Switch Fiber Pair (Intra-campus) | Pairs (6450580404) (01/2024| 10 Gbps Fiber to 14AIFIIqmG (5HI7G80Q) (01/2024)",
+      "quantity": 3078.56,
+      "tax_rate": null,
+      "price": 5076.42,
+      "total": 15628063.56
+    },
+    {
+      "sku": null,
+      "description": "Transport | Switch Fiber Pair (Intra-campus) | Pairs (9818139719) (04/2023|10 Gbps Fiber to gGPS1 Ef6 (C2NXECIF) (04/2023)",
+      "quantity": 6480.38,
+      "tax_rate": null,
+      "price": 1340.91,
+      "total": 8689606.35
+    }
+  ],
+  "warnings": []
+}

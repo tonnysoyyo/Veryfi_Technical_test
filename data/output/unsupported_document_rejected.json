@@ -1,0 +1,24 @@
+{
+  "status": "rejected",
+  "file_name": "unsupported_document.txt",
+  "reason": "Document does not match the expected Switch invoice format.",
+  "classification": {
+    "is_supported": false,
+    "document_type": null,
+    "score": 0,
+    "matched_markers": [],
+    "missing_markers": [
+      "switch",
+      "invoice date",
+      "due date",
+      "invoice no",
+      "account no",
+      "p.o. number",
+      "description",
+      "quantity",
+      "rate",
+      "amount"
+    ],
+    "reason": "Document does not match the expected Switch invoice format."
+  }
+}
